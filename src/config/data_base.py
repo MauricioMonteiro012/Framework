@@ -14,19 +14,25 @@ def init_db(app):
     
     # ========== OPÇÃO 1: SQLite (Sem Docker) ==========
     # Banco de dados local, arquivo criado na pasta do projeto
-    # basedir = os.path.abspath(os.path.dirname(__file__))
-    # db_path = os.path.join(basedir, '..', '..', 'market_management.db')
-    # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    #basedir = os.path.abspath(os.path.dirname(__file__))
+    #db_path = os.path.join(basedir, '..', '..', 'market_management.db')
+    #app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     
     # ========== OPÇÃO 2: MySQL (Com Docker) ==========
     # Descomente a linha abaixo e comente a linha do SQLite acima
     # Depois rode: docker-compose up
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@mysql57:3306/market_management'
     
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@mysql57:3306/market_management'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     
-    # Cria as tabelas automaticamente
     with app.app_context():
-        db.create_all()
+        try:
+            # Isso vai tentar criar as tabelas. 
+            # Se o banco não estiver pronto, ele vai falhar aqui.
+            db.create_all()
+            print("=== Tabelas criadas com sucesso! ===")
+        except Exception as e:
+            print(f"=== Erro ao conectar no banco: {e} ===")
+            print("Dica: Aguarde 15 segundos e rode 'docker-compose start web'")
 
