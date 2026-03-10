@@ -4,10 +4,7 @@ from src.Application.Service.user_service import UserService
 class UserController:
     @staticmethod
     def register_user():
-        data = request.get_json(silent=True)
-        if data is None:
-            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
-
+        data = request.get_json()
         name = data.get('name')
         cnpj = data.get('cnpj')
         email = data.get('email')
@@ -22,13 +19,10 @@ class UserController:
             "mensagem": "Vendedor cadastrado com sucesso. Código enviado via WhatsApp.",
             "vendedor": user.to_dict()
         }), 201)
-
+   
     @staticmethod
     def activate_user():
-        data = request.get_json(silent=True)
-        if data is None:
-            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
-
+        data = request.get_json()
         celular = data.get('celular')
         codigo = data.get('codigo')
 
