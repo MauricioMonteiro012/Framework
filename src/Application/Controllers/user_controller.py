@@ -6,30 +6,30 @@ class UserController:
     def register_user():
         data = request.get_json()
         name = data.get('name')
+        cnpj = data.get('cnpj')
         email = data.get('email')
+        celular = data.get('celular')
         password = data.get('password')
 
-        if not name or not email or not password:
-            return make_response(jsonify({"erro": "Missing required fields"}), 400)
+        if not all([name, cnpj, email, celular, password]):
+            return make_response(jsonify({"erro": "Campos obrigatórios ausentes"}), 400)
 
-        user = UserService.create_user(name, email, password)
+        user = UserService.create_user(name, cnpj, email, celular, password)
         return make_response(jsonify({
-            "mensagem": "User salvo com sucesso",
-            "usuarios": user.to_dict()
-        }), 200)
-
-
-
+            "mensagem": "Vendedor cadastrado com sucesso. Código enviado via WhatsApp.",
+            "vendedor": user.to_dict()
+        }), 201)
+   
     @staticmethod
     def activate_user():
         data = request.get_json()
-        email = data.get("email")
+        celular = data.get('celular')
+        codigo = data.get('codigo')
 
-        if not email:
-            return make_response(jsonify({"erro": "Email é obrigatório"}), 400)
+        if not celular or not codigo:
+            return make_response(jsonify({"erro": "Celular e código obrigatórios"}), 400)
 
-        user = UserService.activate_user(email)
-
-        return make_response(jsonify({
-            "mensagem": "User ativado com sucesso"
-        }), 200)
+        if UserService.activate_user(celular, codigo):
+            return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
+        else:
+            return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)

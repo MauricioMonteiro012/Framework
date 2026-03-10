@@ -1,23 +1,31 @@
+import random
+import string
 from src.Domain.user import UserDomain
 from src.Infrastructure.Model.user import User
-from src.config.data_base import db 
+from src.config.data_base import db
+from src.Infrastructure.http.whats_app import send_activation_code
 
 class UserService:
     @staticmethod
-    def create_user(name, email, password):        
-        user = User(name=name, email=email, password=password)        
+    def create_user(name, cnpj, email, celular, password):        
+        # Gerar código de ativação de 4 dígitos
+        activation_code = ''.join(random.choices(string.digits, k=4))
+       
+        user = User(name=name, cnpj=cnpj, email=email, celular=celular, password=password, status='Inativo', activation_code=activation_code)        
         db.session.add(user)
-        db.session.commit()       
-        return UserDomain(user.id, user.name, user.email, user.password)
-
-    @staticmethod
-    def activate_user(email):
-        user = User.query.filter_by(email=email).first()
-
-        if not user:
-            return None
-
-        user.active = True
         db.session.commit()
-
-        return user
+       
+        # Enviar código via WhatsApp
+        send_activation_code(celular, activation_code)
+       
+        return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status)
+   
+    @staticmethod
+    def activate_user(celular, code):
+        user = User.query.filter_by(celular=celular, activation_code=code).first()
+        if user and user.status == 'Inativo':
+            user.status = 'Ativo'
+            user.activation_code = None  # Limpar código após ativação
+            db.session.commit()
+            return True
+        return False
