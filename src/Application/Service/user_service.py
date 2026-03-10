@@ -9,3 +9,15 @@ class UserService:
         db.session.add(user)
         db.session.commit()       
         return UserDomain(user.id, user.name, user.email, user.password)
+
+    @staticmethod
+    def activate_user(email):
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return None
+
+        user.active = True
+        db.session.commit()
+
+        return user

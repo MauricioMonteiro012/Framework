@@ -17,3 +17,19 @@ class UserController:
             "mensagem": "User salvo com sucesso",
             "usuarios": user.to_dict()
         }), 200)
+
+
+
+    @staticmethod
+    def activate_user():
+        data = request.get_json()
+        email = data.get("email")
+
+        if not email:
+            return make_response(jsonify({"erro": "Email é obrigatório"}), 400)
+
+        user = UserService.activate_user(email)
+
+        return make_response(jsonify({
+            "mensagem": "User ativado com sucesso"
+        }), 200)
