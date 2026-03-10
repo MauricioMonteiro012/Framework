@@ -17,3 +17,7 @@ env/
 
 # OS
 .DS_Store
+.db/
+
+.db/*
+!.gitignore
