@@ -4,16 +4,38 @@ from src.Application.Service.user_service import UserService
 class UserController:
     @staticmethod
     def register_user():
-        data = request.get_json()
+        data = request.get_json(silent=True)
+        if data is None:
+            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
+
         name = data.get('name')
+        cnpj = data.get('cnpj')
         email = data.get('email')
+        celular = data.get('celular')
         password = data.get('password')
 
-        if not name or not email or not password:
-            return make_response(jsonify({"erro": "Missing required fields"}), 400)
+        if not all([name, cnpj, email, celular, password]):
+            return make_response(jsonify({"erro": "Campos obrigatórios ausentes"}), 400)
 
-        user = UserService.create_user(name, email, password)
+        user = UserService.create_user(name, cnpj, email, celular, password)
         return make_response(jsonify({
-            "mensagem": "User salvo com sucesso",
-            "usuarios": user.to_dict()
-        }), 200)
+            "mensagem": "Vendedor cadastrado com sucesso. Código enviado via WhatsApp.",
+            "vendedor": user.to_dict()
+        }), 201)
+
+    @staticmethod
+    def activate_user():
+        data = request.get_json(silent=True)
+        if data is None:
+            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
+
+        celular = data.get('celular')
+        codigo = data.get('codigo')
+
+        if not celular or not codigo:
+            return make_response(jsonify({"erro": "Celular e código obrigatórios"}), 400)
+
+        if UserService.activate_user(celular, codigo):
+            return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
+        else:
+            return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)
