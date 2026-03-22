@@ -16,13 +16,13 @@ class UserService:
         db.session.commit()
        
         # Enviar código via WhatsApp
-        send_activation_code(celular, activation_code)
+        send_activation_code(activation_code)
        
         return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status)
    
     @staticmethod
-    def activate_user(celular, code):
-        user = User.query.filter_by(celular=celular, activation_code=code).first()
+    def activate_user(celular, code, email):
+        user = User.query.filter_by(celular=celular, activation_code=code, email=email).first()
         if user and user.status == 'Inativo':
             user.status = 'Ativo'
             user.activation_code = None  # Limpar código após ativação
