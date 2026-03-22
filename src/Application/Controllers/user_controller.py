@@ -23,13 +23,14 @@ class UserController:
     @staticmethod
     def activate_user():
         data = request.get_json()
+        email = data.get('email')
         celular = data.get('celular')
         codigo = data.get('codigo')
 
-        if not celular or not codigo:
-            return make_response(jsonify({"erro": "Celular e código obrigatórios"}), 400)
+        if not celular or not codigo or not email:
+            return make_response(jsonify({"erro": "Celular, código e email obrigatórios"}), 400)
 
-        if UserService.activate_user(celular, codigo):
+        if UserService.activate_user(celular, codigo, email):
             return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
         else:
             return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)
