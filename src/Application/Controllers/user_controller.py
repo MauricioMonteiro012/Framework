@@ -4,10 +4,7 @@ from src.Application.Service.user_service import UserService
 class UserController:
     @staticmethod
     def register_user():
-        data = request.get_json(silent=True)
-        if data is None:
-            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
-
+        data = request.get_json()
         name = data.get('name')
         cnpj = data.get('cnpj')
         email = data.get('email')
@@ -22,20 +19,18 @@ class UserController:
             "mensagem": "Vendedor cadastrado com sucesso. Código enviado via WhatsApp.",
             "vendedor": user.to_dict()
         }), 201)
-
+   
     @staticmethod
     def activate_user():
-        data = request.get_json(silent=True)
-        if data is None:
-            return make_response(jsonify({"erro": "Request body must be valid JSON"}), 400)
-
+        data = request.get_json()
+        email = data.get('email')
         celular = data.get('celular')
         codigo = data.get('codigo')
 
-        if not celular or not codigo:
-            return make_response(jsonify({"erro": "Celular e código obrigatórios"}), 400)
+        if not celular or not codigo or not email:
+            return make_response(jsonify({"erro": "Celular, código e email obrigatórios"}), 400)
 
-        if UserService.activate_user(celular, codigo):
+        if UserService.activate_user(celular, codigo, email):
             return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
         else:
             return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)
