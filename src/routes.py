@@ -1,4 +1,4 @@
-from src.Application.Controllers import UserController 
+from src.Application.Controllers.user_controller import UserController 
 from flask import jsonify, make_response
 
 def init_routes(app):    
