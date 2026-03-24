@@ -1,5 +1,6 @@
 from flask import request, jsonify, make_response
 from src.Application.Service.user_service import UserService
+from src.Infrastructure.Security.jwt_handler import JWTHandler
 
 class UserController:
     @staticmethod
@@ -64,3 +65,15 @@ class UserController:
             # Tratamento de erro 3: Evita que o servidor caia
             print(f"Erro no login: {e}")
             return jsonify({"error": "Erro interno no servidor."}), 500
+        
+    @staticmethod
+    def update_profile():
+            try:
+                user_id = JWTHandler.get_user_id_from_token(request.headers.get('Authorization'))
+                
+                data = request.get_json()
+                UserService.update_user(user_id, data)
+                
+                return jsonify({"message": "Dados atualizados com sucesso!"}), 200
+            except Exception as e:
+                return jsonify({"error": str(e)}), 400

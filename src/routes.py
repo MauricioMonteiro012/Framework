@@ -13,7 +13,6 @@ def init_routes(app):
             "mensagem": "API - OK; Docker - Up",
         }), 200)
     
-    # endpoints related to sellers (mini mercados)
     @app.route('/api/sellers', methods=['POST'])
     def register_seller():
         # cria um novo vendedor; dados são validados no controller
@@ -24,10 +23,10 @@ def init_routes(app):
         # ativa vendedor com código recebido via WhatsApp
         return UserController.activate_user()
     
-    # A rota exata que o professor vai testar com o curl
     @app.route('/api/auth/login', methods=['POST'])
     def login():
-        # A rota apenas repassa a bola para o Controller fazer o trabalho sujo
         return UserController.login_user()   
 
-
+    @app.route('/api/user/update', methods=['PUT'])
+    def update_user_route():
+        return UserController.update_profile()

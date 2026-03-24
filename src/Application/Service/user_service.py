@@ -20,14 +20,12 @@ class UserService:
         db.session.add(user)
         db.session.commit()
         
-        # Enviar código via WhatsApp (Sua parte da Main)
         send_activation_code(activation_code)
         
         return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status)
 
     @staticmethod
     def login(email, senha):
-        # (Parte da Gabi)
         user = User.query.filter_by(email=email).first()
         
         # 1. Verifica se o e-mail existe e se a senha desencriptada bate com a digitada
@@ -44,11 +42,10 @@ class UserService:
 
     @staticmethod
     def activate_user(celular, code, email):
-        # (Sua parte da Main)
         user = User.query.filter_by(celular=celular, activation_code=code, email=email).first()
         if user and user.status == 'Inativo':
             user.status = 'Ativo'
-            user.activation_code = None  # Limpar código após ativação
+            user.activation_code = None  
             db.session.commit()
             return True
         return False
@@ -68,3 +65,20 @@ class UserService:
         # 3. Gera e retorna o Token JWT
         token = JWTHandler.generate_token(user.id)
         return token
+
+    @staticmethod
+    def update_user(user_id, data):
+        user = User.query.get(user_id)
+        if not user:
+            raise ValueError("Usuário não encontrado.")
+
+        # Atualiza apenas os campos que foram enviados
+        if 'name' in data: user.name = data['name']
+        if 'celular' in data: user.celular = data['celular']
+        
+        # Se ele mudar a senha, precisamos criptografar de novo!
+        if 'senha' in data:
+            user.password = generate_password_hash(data['senha'])
+
+        db.session.commit()
+        return user
