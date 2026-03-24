@@ -16,6 +16,23 @@ class UserController:
             if not email or not senha:
                  return jsonify({"error": "E-mail e senha são obrigatórios"}), 400
 
+        if UserService.activate_user(celular, codigo, email):
+            return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
+        else:
+            return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)
+        
+    @staticmethod
+    def login_user():
+        try:
+            data = request.get_json()
+           
+            # Pegando os campos exatos do curl do professor
+            email = data.get('email')
+            senha = data.get('senha')
+           
+            if not email or not senha:
+                 return jsonify({"error": "E-mail e senha são obrigatórios"}), 400
+
             # O Controller chama a regra de negócio do Service
             token = UserService.login(email, senha)
            

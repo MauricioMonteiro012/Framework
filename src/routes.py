@@ -24,7 +24,10 @@ def init_routes(app):
         # ativa vendedor com código recebido via WhatsApp
         return UserController.activate_user()
     
-    
+    # A rota exata que o professor vai testar com o curl
     @app.route('/api/auth/login', methods=['POST'])
     def login():
+        # A rota apenas repassa a bola para o Controller fazer o trabalho sujo
         return UserController.login_user()   
+
+
