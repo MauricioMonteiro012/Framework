@@ -4,3 +4,4 @@ Werkzeug>=3.0
 SQLALchemy>=2.0
 twilio>=7.0
 mysql-connector-python
+PyJWT==2.8.0
