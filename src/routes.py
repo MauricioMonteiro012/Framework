@@ -1,4 +1,4 @@
-from src.Application.Controllers.user_controller import UserController
+from src.Application.Controllers import UserController 
 from flask import jsonify, make_response
 
 def init_routes(app):    
@@ -25,4 +25,6 @@ def init_routes(app):
         return UserController.activate_user()
     
     
-
+    @app.route('/api/auth/login', methods=['POST'])
+    def login():
+        return UserController.login_user()   
