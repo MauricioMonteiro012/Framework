@@ -19,14 +19,32 @@ class UserService:
         user = User(name=name, cnpj=cnpj, email=email, celular=celular, password=hashed_password, status='Inativo', activation_code=activation_code)        
         db.session.add(user)
         db.session.commit()
-       
-        # Enviar código via WhatsApp
+        
+        # Enviar código via WhatsApp (Sua parte da Main)
         send_activation_code(activation_code)
-       
+        
         return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status)
-   
+
+    @staticmethod
+    def login(email, senha):
+        # (Parte da Gabi)
+        user = User.query.filter_by(email=email).first()
+        
+        # 1. Verifica se o e-mail existe e se a senha desencriptada bate com a digitada
+        if not user or not check_password_hash(user.password, senha):
+            raise ValueError("E-mail ou senha incorretos.")
+            
+        # 2. Impede login se não ativou o zap
+        if user.status == 'Inativo':
+            raise PermissionError("Conta pendente de ativação via WhatsApp.")
+            
+        # 3. Gera e retorna o Token JWT
+        token = JWTHandler.generate_token(user.id)
+        return token
+
     @staticmethod
     def activate_user(celular, code, email):
+        # (Sua parte da Main)
         user = User.query.filter_by(celular=celular, activation_code=code, email=email).first()
         if user and user.status == 'Inativo':
             user.status = 'Ativo'
