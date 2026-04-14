@@ -10,6 +10,8 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(10), default='Inativo', nullable=False)  # 'Ativo' ou 'Inativo'
     activation_code = db.Column(db.String(4), nullable=True)  # Código de 4 dígitos para ativação
+    
+    produtos = db.relationship('Produto', backref='user', lazy=True)
 
     def to_dict(self):
         return {

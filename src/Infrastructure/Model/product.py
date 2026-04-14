@@ -9,6 +9,8 @@ class Product(db.Model):
     status = db.Column(db.String(10), default='Ativo', nullable=False)  # 'Ativo' ou 'Inativo'
     img = db.Column(db.String(255), nullable=True)  # URL da imagem do produto
 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -16,5 +18,6 @@ class Product(db.Model):
             "preco": self.preco,
             "qtd": self.qtd,
             "status": self.status,
-            "img": self.img
+            "img": self.img,
+            "user_id": self.user_id
         }

@@ -27,6 +27,16 @@ def init_routes(app):
     def login():
         return UserController.login_user()   
 
+    @app.route('/api/products', methods=['POST'])
+    def cad_products():
+        # cadastrar produtos, apenas vendedores ativos podem cadastrar
+        return UserController.cad_products()
+    
+    @app.route('/api/products', methods=['GET'])
+    def list_products():
+        # lista todos os produtos cadastrados
+        return UserController.list_products()
+      
     @app.route('/api/user/update', methods=['PUT'])
     def update_user_route():
         return UserController.update_profile()

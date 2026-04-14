@@ -49,22 +49,6 @@ class UserService:
             db.session.commit()
             return True
         return False
-    
-    @staticmethod
-    def login(email, senha):
-        user = User.query.filter_by(email=email).first()
-       
-        # 1. Verifica se o e-mail existe e se a senha desencriptada bate com a digitada
-        if not user or not check_password_hash(user.password, senha):
-            raise ValueError("E-mail ou senha incorretos.")
-           
-        # 2. Impede login se não ativou o zap
-        if user.status == 'Inativo':
-            raise PermissionError("Conta pendente de ativação via WhatsApp.")
-           
-        # 3. Gera e retorna o Token JWT
-        token = JWTHandler.generate_token(user.id)
-        return token
 
     @staticmethod
     def update_user(user_id, data):
