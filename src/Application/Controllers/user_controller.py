@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from src.Application.Service.user_service import UserService
 from src.Infrastructure.Security.jwt_handler import JWTHandler, token_required
 
