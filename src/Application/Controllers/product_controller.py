@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from src.Application.Service.user_service import UserService
+from src.Application.Service.product_service import ProductService
 from src.Infrastructure.Security.jwt_handler import token_required
 
 class ProductController:
@@ -20,7 +21,7 @@ class ProductController:
                  return jsonify({"error": "Nome, preço e quantidade são obrigatórios"}), 400
 
             # O Controller chama a regra de negócio do Service
-            result = UserService.cad_products(nome, preco, qtd, img, user_id)
+            result = ProductService.cad_products(nome, preco, qtd, img, user_id)
            
             return jsonify({"message": "Produto cadastrado com sucesso!", "produto": result}), 200
            
@@ -35,18 +36,18 @@ class ProductController:
         except Exception as e:
             # Tratamento de erro 3: Evita que o servidor caia
             print(f"Erro no cadastro de produto: {e}")
-            return jsonify({"error": "Erro interno no servidor."}), 500
+            return jsonify({"error": f"Erro interno no servidor {e}"}), 500
         
     @staticmethod
     @token_required
     def list_products(current_user_id):
         try:
             user_id = current_user_id 
-            products = UserService.list_products(user_id)
+            products = ProductService.list_products(user_id)
            
             return jsonify({"produtos": products}), 200
            
         except Exception as e:
             # Tratamento de erro: Evita que o servidor caia
             print(f"Erro ao listar produtos: {e}")
-            return jsonify({"error": "Erro interno no servidor."}), 500
+            return jsonify({"error": f"Erro interno no servidor {e}"}), 500
