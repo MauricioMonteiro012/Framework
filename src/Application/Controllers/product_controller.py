@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from src.Application.Service.user_service import UserService
 from src.Application.Service.product_service import ProductService
-from src.Infrastructure.Security.jwt_handler import token_required
+from src.Infrastructure.Security.jwt_handler import JWTHandler, token_required
 
 class ProductController:
     @staticmethod

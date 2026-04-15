@@ -17,23 +17,6 @@ class JWTHandler:
         }
         return jwt.encode(payload, JWT_SECRET, algorithm='HS256')
 
-    # Decorator para proteger as rotas
-    def token_required(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            token = request.headers.get('Authorization')
-            if not token:
-                return jsonify({'error': 'Token ausente. Acesso negado!'}), 401
-            try:
-                token = token.replace("Bearer ", "")
-                data = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
-                current_user_id = data['sub']
-            except Exception as e:
-                # Tratamento de exceção se o token for inválido ou expirar
-                return jsonify({'error': 'Token inválido ou expirado!'}), 401
-            return f(current_user_id, *args, **kwargs)
-        return decorated
-
     @staticmethod
     def get_user_id_from_token(auth_header):
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -50,3 +33,19 @@ class JWTHandler:
             raise PermissionError("O Token expirou. Faça login novamente.")
         except jwt.InvalidTokenError:
             raise PermissionError("Token inválido.")
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'Token ausente. Acesso negado!'}), 401
+        try:
+            token = token.replace("Bearer ", "")
+            data = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+            current_user_id = data['sub']
+        except Exception as e:
+            # Tratamento de exceção se o token for inválido ou expirar
+            return jsonify({'error': 'Token inválido ou expirado!'}), 401
+        return f(current_user_id, *args, **kwargs)
+    return decorated
