@@ -33,6 +33,7 @@ services:
       TWILIO_AUTH_TOKEN: ${TWILIO_TOKEN}
       TWILIO_WHATSAPP_NUMBER: "whatsapp:+14155238886"
       MY_PERSONAL_NUMBER: "+5511948402764"
+      JWT_SECRET_KEY: "PROJETO_ANALICE_2026"
     depends_on:
       mysql57:
         condition: service_healthy

@@ -1,5 +1,8 @@
 from src.Application.Controllers.user_controller import UserController 
+<<<<<<< HEAD
 from src.Application.Controllers.product_controller import ProductController
+=======
+>>>>>>> 70cad277eae29bfa0a8f6f90c165ad1b4c206963
 from flask import jsonify, make_response
 
 def init_routes(app):    
@@ -14,7 +17,6 @@ def init_routes(app):
             "mensagem": "API - OK; Docker - Up",
         }), 200)
     
-    # endpoints related to sellers (mini mercados)
     @app.route('/api/sellers', methods=['POST'])
     def register_seller():
         # cria um novo vendedor; dados são validados no controller
@@ -25,10 +27,8 @@ def init_routes(app):
         # ativa vendedor com código recebido via WhatsApp
         return UserController.activate_user()
     
-    # A rota exata que o professor vai testar com o curl
     @app.route('/api/auth/login', methods=['POST'])
     def login():
-        # A rota apenas repassa a bola para o Controller fazer o trabalho sujo
         return UserController.login_user()   
 
     @app.route('/api/products', methods=['POST'])
@@ -40,3 +40,7 @@ def init_routes(app):
     def list_products():
         # lista todos os produtos cadastrados
         return ProductController.list_products()
+      
+    @app.route('/api/user/update', methods=['PUT'])
+    def update_user_route():
+        return UserController.update_profile()
