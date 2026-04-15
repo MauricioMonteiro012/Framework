@@ -1,5 +1,6 @@
 import random
 import string
+from src.Infrastructure.Model.product import Produto
 from src.Infrastructure.Security.jwt_handler import JWTHandler
 from werkzeug.security import check_password_hash, generate_password_hash
 from src.Domain.user import UserDomain

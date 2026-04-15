@@ -1,4 +1,5 @@
-from src.Application.Controllers import UserController 
+from src.Application.Controllers.user_controller import UserController 
+from src.Application.Controllers.product_controller import ProductController
 from flask import jsonify, make_response
 
 def init_routes(app):    
@@ -33,9 +34,9 @@ def init_routes(app):
     @app.route('/api/products', methods=['POST'])
     def cad_products():
         # cadastrar produtos, apenas vendedores ativos podem cadastrar
-        return UserController.cad_products()
+        return ProductController.cad_products()
     
     @app.route('/api/products', methods=['GET'])
     def list_products():
         # lista todos os produtos cadastrados
-        return UserController.list_products()
+        return ProductController.list_products()
