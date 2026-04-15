@@ -1,8 +1,5 @@
 from src.Application.Controllers.user_controller import UserController 
-<<<<<<< HEAD
 from src.Application.Controllers.product_controller import ProductController
-=======
->>>>>>> 70cad277eae29bfa0a8f6f90c165ad1b4c206963
 from flask import jsonify, make_response
 
 def init_routes(app):    
