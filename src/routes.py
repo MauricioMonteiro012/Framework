@@ -41,3 +41,15 @@ def init_routes(app):
     @app.route('/api/user/update', methods=['PUT'])
     def update_user_route():
         return UserController.update_profile()
+    
+    @app.route('/api/products/<int:product_id>', methods=['GET'])
+    def get_product_details(product_id):
+        return ProductController.get_product_details(product_id)
+
+    @app.route('/api/products/<int:product_id>', methods=['PUT'])
+    def edit_product(product_id):
+        return ProductController.edit_product(product_id)
+
+    @app.route('/api/products/<int:product_id>', methods=['DELETE'])
+    def delete_product(product_id):
+        return ProductController.inactivate_product(product_id)
