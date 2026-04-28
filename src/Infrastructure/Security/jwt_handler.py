@@ -17,7 +17,23 @@ class JWTHandler:
         }
         return jwt.encode(payload, JWT_SECRET, algorithm='HS256')
 
-# Decorator para proteger as rotas
+    @staticmethod
+    def get_user_id_from_token(auth_header):
+        if not auth_header or not auth_header.startswith('Bearer '):
+            raise ValueError("Token não fornecido ou formato inválido.")
+
+        token = auth_header.split(" ")[1]
+        
+        try:
+            payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY', 'PROJETO_ANALICE_2026'), algorithms=['HS256'])
+            
+            return payload['sub']
+            
+        except jwt.ExpiredSignatureError:
+            raise PermissionError("O Token expirou. Faça login novamente.")
+        except jwt.InvalidTokenError:
+            raise PermissionError("Token inválido.")
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):

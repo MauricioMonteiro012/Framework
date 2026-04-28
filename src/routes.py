@@ -41,5 +41,3 @@ def init_routes(app):
     @app.route('/api/user/update', methods=['PUT'])
     def update_user_route():
         return UserController.update_profile()
-    
-
