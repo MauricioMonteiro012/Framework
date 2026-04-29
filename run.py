@@ -2,6 +2,7 @@ from flask import Flask
 from src.config.data_base import init_db
 from src.routes import init_routes
 from src.config.data_base import db
+from src.Infrastructure.Model import user, product, sale  # Importar models para criar tabelas
 
 
 def create_app():

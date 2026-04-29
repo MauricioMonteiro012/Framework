@@ -1,5 +1,6 @@
 from src.Application.Controllers.user_controller import UserController 
 from src.Application.Controllers.product_controller import ProductController
+from src.Application.Controllers.sale_controller import SaleController
 from flask import jsonify, make_response
 
 def init_routes(app):    
@@ -53,3 +54,8 @@ def init_routes(app):
     @app.route('/api/products/<int:product_id>', methods=['DELETE'])
     def delete_product(product_id):
         return ProductController.inactivate_product(product_id)
+
+    @app.route('/api/sales', methods=['POST'])
+    def create_sale():
+        # realizar venda de produto
+        return SaleController.create_sale()
