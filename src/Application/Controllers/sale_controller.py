@@ -20,7 +20,7 @@ class SaleController:
                 if quantity <= 0:
                     raise ValueError
             except ValueError:
-                return jsonify({"error": "Quantidade deve ser um número inteiro positivo"}), 400
+                return jsonify({"error": "Quantidade deve ser um número positivo"}), 400
 
             # Chama o service
             result = SaleService.create_sale(product_id, quantity, current_user_id)
