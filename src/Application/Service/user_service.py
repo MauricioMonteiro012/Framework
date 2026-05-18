@@ -21,9 +21,9 @@ class UserService:
         db.session.add(user)
         db.session.commit()
         
-        send_activation_code(activation_code)
+        sent = send_activation_code(activation_code)
         
-        return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status)
+        return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status), activation_code, sent
 
     @staticmethod
     def login(email, senha):

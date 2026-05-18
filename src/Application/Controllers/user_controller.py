@@ -15,11 +15,15 @@ class UserController:
         if not all([name, cnpj, email, celular, password]):
             return make_response(jsonify({"erro": "Campos obrigatórios ausentes"}), 400)
 
-        user = UserService.create_user(name, cnpj, email, celular, password)
-        return make_response(jsonify({
-            "mensagem": "Vendedor cadastrado com sucesso. Código enviado via WhatsApp.",
+        user, activation_code, sent = UserService.create_user(name, cnpj, email, celular, password)
+        response = {
+            "mensagem": "Vendedor cadastrado com sucesso.",
             "vendedor": user.to_dict()
-        }), 201)
+        }
+        if not sent:
+            response["mensagem"] = "Vendedor cadastrado, mas não foi possível enviar o código via WhatsApp."
+            response["activation_code"] = activation_code
+        return make_response(jsonify(response), 201)
    
     @staticmethod
     def activate_user():
@@ -35,6 +39,51 @@ class UserController:
             return make_response(jsonify({"mensagem": "Vendedor ativado com sucesso"}), 200)
         else:
             return make_response(jsonify({"erro": "Código inválido ou vendedor já ativo"}), 400)
+        
+    @staticmethod
+    def register_user_web():
+        name = request.form.get('name')
+        cnpj = request.form.get('cnpj')
+        email = request.form.get('email')
+        celular = request.form.get('celular')
+        password = request.form.get('password')
+
+        if not all([name, cnpj, email, celular, password]):
+            return {"success": False, "message": "Todos os campos são obrigatórios."}
+
+        try:
+            user, activation_code, sent = UserService.create_user(name, cnpj, email, celular, password)
+            if sent:
+                return {"success": True, "message": "Cadastro realizado com sucesso. Código enviado via WhatsApp."}
+            return {"success": True, "message": f"Cadastro realizado, mas não foi possível enviar o código via WhatsApp. Código: {activation_code}"}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+
+    @staticmethod
+    def activate_user_web():
+        email = request.form.get('email')
+        celular = request.form.get('celular')
+        codigo = request.form.get('codigo')
+
+        if not email or not celular or not codigo:
+            return {"success": False, "message": "Email, celular e código são obrigatórios."}
+
+        if UserService.activate_user(celular, codigo, email):
+            return {"success": True, "message": "Conta ativada com sucesso."}
+        return {"success": False, "message": "Código inválido ou conta já ativa."}
+
+    @staticmethod
+    def login_user_web():
+        identifier = request.form.get('identifier')
+        password = request.form.get('password')
+
+        if not identifier or not password:
+            return {"success": False, "message": "Email/Celular e senha são obrigatórios."}
+        try:
+            token = UserService.login(identifier, password)
+            return {"success": True, "message": "Login realizado com sucesso.", "token": token}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
         
     @staticmethod
     def login_user():

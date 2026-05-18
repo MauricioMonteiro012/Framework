@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Vendedor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Vendedor</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="message {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="form-box">
+            <form id="cadastroForm">
+                <label for="name">Nome completo</label>
+                <input type="text" id="name" name="name" placeholder="Seu nome" required>
+
+                <label for="cnpj">CNPJ</label>
+                <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="email@exemplo.com" required>
+
+                <label for="celular">Celular</label>
+                <input type="text" id="celular" name="celular" placeholder="+55 11 91234-5678" required>
+
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+            {% if activation_code %}
+                <div class="info-box">
+                    <strong>Código de ativação:</strong>
+                    <span>{{ activation_code }}</span>
+                </div>
+            {% endif %}
+            <p class="small-text">
+                Já tem conta? <a href="{{ url_for('login') }}">Faça login</a>
+            </p>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

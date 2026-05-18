@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="page">
+        <div class="card">
+            <h1>Bem-vindo ao Mercado</h1>
+            <p>Use o painel abaixo para acessar cadastro, ativação e login.</p>
+            <div class="links">
+                <a class="button" href="{{ url_for('cadastro') }}">Cadastrar-se</a>
+                <a class="button secondary" href="{{ url_for('login') }}">Login</a>
+                <a class="button ghost" href="{{ url_for('ativacao') }}">Ativar Conta</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

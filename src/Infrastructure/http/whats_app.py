@@ -20,5 +20,7 @@ def send_activation_code(code):
             to=f"whatsapp:{TO_NUMBER}" 
         )
         print(f"Código enviado para {TO_NUMBER}: {message.sid}")
+        return True
     except Exception as e:
         print(f"Erro ao enviar WhatsApp: {e}", flush=True)
+        return False
