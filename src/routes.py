@@ -1,13 +1,19 @@
 from src.Application.Controllers.user_controller import UserController 
 from src.Application.Controllers.product_controller import ProductController
 from src.Application.Controllers.sale_controller import SaleController
+import os
 from flask import jsonify, make_response
 from flask import render_template, request, redirect, url_for, flash
+
+TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
+
 
 def init_routes(app):    
     @app.route('/', methods=['GET'])
     def index():
-        # rota base redireciona para health endpoint
+        react_template = os.path.join(TEMPLATES_PATH, 'react_index.html')
+        if os.path.exists(react_template):
+            return render_template('react_index.html')
         return render_template('index.html')
 
     @app.route('/api', methods=['GET'])

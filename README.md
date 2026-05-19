@@ -200,10 +200,34 @@ curl -X POST "http://localhost:8080/api/sales" \
 ## 🛠️ Tecnologias Utilizadas
 
 * **Back-end:** Kotlin + Spring Boot
-* **Front-end:** React.js
+* **Front-end:** React.js (Vite)
 * **Banco de Dados:** MySQL ou PostgreSQL
 * **Autenticação:** JWT ou OAuth
 * **Mensageria:** Twilio (envio de código via WhatsApp)
+
+---
+
+## 💻 Setup e Build do Frontend (React)
+
+### Instalação de dependências e desenvolvimento:
+
+```bash
+npm install
+npm run dev    # inicia servidor Vite em http://localhost:5173
+```
+
+### Build para produção:
+
+```bash
+npm run build
+```
+
+Este comando:
+1. Compila o React usando Vite
+2. Gera os arquivos estáticos em `static/frontend/`
+3. Cria automaticamente `templates/react_index.html` com referências aos assets buildados
+
+O `templates/react_index.html` será servido pelo backend e carregará os assets estáticos do frontend.
 
 ---
 

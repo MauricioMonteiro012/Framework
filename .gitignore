@@ -21,3 +21,9 @@ env/
 
 .db/*
 !.gitignore
+
+# Frontend/Node
+node_modules/
+frontend/dist/
+*.local
+frontend/.env.local
