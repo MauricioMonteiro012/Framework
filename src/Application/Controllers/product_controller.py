@@ -43,3 +43,11 @@ class ProductController:
             return jsonify({"message": "Produto inativado com sucesso", "product": product.to_dict()}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 400
+        
+    @staticmethod
+    def activate_product(current_user, product_id):
+        try:
+            product = ProductService.activate_product(current_user.id, product_id)
+            return jsonify({"message": "Produto reativado com sucesso", "product": product.to_dict()}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400

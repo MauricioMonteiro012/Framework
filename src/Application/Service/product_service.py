@@ -80,3 +80,13 @@ class ProductService:
         product.status = False
         db.session.commit()
         return product
+    
+    @staticmethod
+    def activate_product(seller_id, product_id):
+        product = Product.query.filter_by(id=product_id, seller_id=seller_id).first()
+        if not product:
+            raise Exception("Produto não encontrado")
+        
+        product.status = True  # Define o status como ativo novamente
+        db.session.commit()
+        return product

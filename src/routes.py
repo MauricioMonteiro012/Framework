@@ -75,3 +75,8 @@ def init_routes(app):
     @token_required
     def get_dashboard(current_user):
         return DashboardController.get_dashboard(current_user)
+    
+    @app.route('/api/products/<int:product_id>/activate', methods=['PATCH'])
+    @token_required
+    def activate_product(current_user, product_id):
+        return ProductController.activate_product(current_user, product_id)
